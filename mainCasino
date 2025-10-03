@@ -1,0 +1,55 @@
+
+
+table={"pomme","pastec", "serise", "anas", "frese","banan","patate" }
+
+fric = 10000
+
+fruis1=0
+fruis2=0
+
+ 
+function mise()
+if btnp (0)and fric>=100 then fric=fric-100 end
+if btnp (1)and fric>=1000 then fric=fric-1000 end 
+end
+
+function fruis()
+
+if btnp(0) and fric>100 then fruis1=table[math.random(1,7)]fruis2=table[math.random(1,7)]fruis3=table[math.random(1,7)] end
+if btnp(1) and fric>1000 then fruis1=table[math.random(1,7)]fruis2=table[math.random(1,7)]fruis3=table[math.random(1,7)] end
+
+
+ 
+end
+
+
+function bonus ()
+
+if fruis1==fruis2 and fruis1==fruis3 and btnp(0) or btn(4)  then fric= fric+200 print("victoir"..fric,100,100)  end
+if fruis1==fruis2 and fruis1==fruis3 and btnp (1)  or btn(5)  then fric= fric+2000 print("victoir"..fric,100,100)  end    
+if fruis1==fruis2 and fruis1==fruis3 then print("victoir"..fric,100,100)spr(7,50,50)  end
+
+if btnp(0)and  fruis1==fruis2 or btnp(0)and fruis1==fruis3 or btnp(0)and fruis2==fruis3  and btn(0)   then fric= fric+100  end
+if btnp(1)and fruis1==fruis2 or btnp(1)and fruis1==fruis3 or btnp(1)and fruis2==fruis3 and btn (1)   then fric= fric+1000   end
+end
+
+function pert() 
+if fric<100 then print("louser",20,40,45)spr(6,50,50) end
+end
+
+
+function TIC()
+
+cls()
+ mise()
+fruis()
+ bonus()
+print (" fric"..fric)
+print (fruis1,0,10,20)
+print (fruis2,0,20,20)
+print (fruis3,0,30,20)
+print (" fleche du haut mise 100",0,110,27)
+print (" fleche du bat  mise 1000",0,120,27)
+ pert() 
+
+end

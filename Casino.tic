@@ -1,1 +1,80 @@
-function TIC
+-- Mini Casino TIC-80
+-- Symboles : 0=cherry, 1=banana, 2=diamond
+
+local gold = 10000
+local bet = 0
+local spinning = false
+local spin_time = 0
+local result = {-1, -1, -1}
+local symbols = {
+    {14, 14, 14, 14, 14, 14, 14, 14}, -- cherry (rouge)
+    {15, 15, 15, 15, 15, 15, 15, 15}, -- banana (jaune)
+    {16, 16, 16, 16, 16, 16, 16, 16}  -- diamond (bleu)
+}
+
+function TIC()
+    -- Fond
+    cls(0)
+
+    -- Affichage du gold et de la mise
+    print("GOLD: "..gold, 5, 5, 7)
+    print("BET: "..bet, 5, 13, 10)
+
+    -- Bouton petite mise (flèche haut)
+    if btn(0) and not spinning and bet == 0 and gold >= 100 then
+        bet = 100
+    end
+
+    -- Bouton grosse mise (flèche bas)
+    if btn(1) and not spinning and bet == 0 and gold >= 1000 then
+        bet = 1000
+    end
+
+    -- ALL IN (flèches gauche + droite)
+    if (btn(2) and btn(3)) and not spinning and bet == 0 and gold > 0 then
+        bet = gold
+    end
+
+    -- Lancer la roulette (bouton A)
+    if btnp(4) and bet > 0 and not spinning then
+        spinning = true
+        spin_time = 0
+        gold = gold - bet
+    end
+
+    -- Animation de la roulette
+    if spinning then
+        spin_time = spin_time + 1
+        for i=0,2 do
+            local r = flr(rnd(3))
+            rect(i*10+50, 50, 8, 8, symbols[r+1][1])
+            result[i+1] = r
+        end
+        if spin_time > 60 then
+            spinning = false
+            -- Vérification des gains
+            if result[1] == result[2] and result[2] == result[3] then
+                local multiplier = 0
+                if result[1] == 0 then multiplier = 2   -- cherry
+                elseif result[1] == 1 then multiplier = 5 -- banana
+                elseif result[1] == 2 then multiplier = 10 -- diamond
+                end
+                gold = gold + bet * multiplier
+            end
+            bet = 0
+        end
+    else
+        -- Affichage des résultats
+        for i=0,2 do
+            if result[i+1] ~= -1 then
+                rect(i*10+50, 50, 8, 8, symbols[result[i+1]+1][1])
+            end
+        end
+    end
+
+    -- Message d'aide (contrôles)
+    print("↑:100  ↓:1000  ←+→:ALL IN", 5, 120, 11)
+    print("A: SPIN", 5, 130, 11)
+    print("3 CHERRY:x2  3 BANANA:x5", 5, 140, 12)a
+    print("3 DIAMOND:x10", 5, 148, 9)
+end
